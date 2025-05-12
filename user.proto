@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package user;
+
+// Определение пути для Go
+option go_package = "user_service/proto";
+
+// Сервис для управления пользователями, регистрации и авторизации
+service UserService {
+  rpc RegisterUser(UserRequest) returns (UserResponse);
+  rpc AuthenticateUser(AuthRequest) returns (AuthResponse);
+  rpc GetUserProfile(UserID) returns (UserProfile);
+}
+
+//////////////////////////////
+// Определения для пользователей
+//////////////////////////////
+
+// Запрос на регистрацию пользователя
+message UserRequest {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+}
+
+// Ответ после регистрации
+message UserResponse {
+  string user_id = 1;
+  string name = 2;
+  string email = 3;
+  string message = 4;
+  bool success = 5;
+}
+
+// Запрос на аутентификацию
+message AuthRequest {
+  string email = 1;
+  string password = 2;
+}
+
+// Ответ аутентификации
+message AuthResponse {
+  bool success = 1;
+  string token = 2;
+  string message = 3;
+}
+
+// Запрос для получения профиля пользователя
+message UserID {
+  string user_id = 1;
+}
+
+// Профиль пользователя
+message UserProfile {
+  string user_id = 1;
+  string name = 2;
+  string email = 3;
+}

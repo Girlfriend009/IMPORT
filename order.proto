@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package order;
+
+// Определение пути для Go
+option go_package = "order_service/proto";
+
+// Сервис для управления заказами и обработкой платежей
+service OrderService {
+  rpc CreateOrder(CreateOrderRequest) returns (OrderResponse);
+  rpc GetOrder(GetOrderRequest) returns (OrderResponse);
+  rpc ProcessPayment(ProcessPaymentRequest) returns (PaymentResponse);
+}
+
+//////////////////////////////
+// Определения для заказов
+//////////////////////////////
+
+// Заказ состоит из списка товаров, идентификатора пользователя и общей стоимости
+message Order {
+  string id = 1;
+  string user_id = 2;
+  repeated OrderItem items = 3;
+  double total_price = 4;
+  string status = 5;
+  string created_at = 6;
+}
+
+message OrderItem {
+  string product_id = 1;
+  int32 quantity = 2;
+  double price = 3;
+}
+
+message CreateOrderRequest {
+  string user_id = 1;
+  repeated OrderItem items = 2;
+}
+
+message GetOrderRequest {
+  string order_id = 1;
+}
+
+message OrderResponse {
+  Order order = 1;
+  string message = 2;
+  bool success = 3;
+}
+
+//////////////////////////////
+// Определения для платежей
+//////////////////////////////
+
+message ProcessPaymentRequest {
+  string order_id = 1;
+  string payment_method = 2; // Например, "credit_card", "paypal" и т.д.
+}
+
+message PaymentResponse {
+  string order_id = 1;
+  string payment_status = 2; // Например, "processed", "failed"
+  string message = 3;
+  bool success = 4;
+}
